@@ -3,12 +3,53 @@
 #include "glad/src/glad.c"
 
 #include "sp_window.h"
+#include "sp_input.h"
 
 #include <algorithm>
 
+namespace {
+	u8 prev_keyboard_state[SDL_NUM_SCANCODES];
+	u8 cur_keyboard_state[SDL_NUM_SCANCODES];
+	u8 prev_mouse_state[2];
+	u8 cur_mouse_state[2];
+	b32 quit_event = false;
+
+}
+
+SPKeyboardKey::SPKeyboardKey(u8 key) {
+	m_key = key;
+}
+
+b32 SPKeyboardKey::pressed() {
+	u8 prev = prev_keyboard_state[m_key];
+	u8 cur = cur_keyboard_state[m_key];
+	if (cur && !prev) {
+		return true;
+	}
+	return false;
+}
+
+b32 SPKeyboardKey::held() {
+	u8 prev = prev_keyboard_state[m_key];
+	u8 cur = cur_keyboard_state[m_key];
+	if ((cur && !prev) || (cur && prev)) {
+		return true;
+	}
+	return false;
+}
+
+b32 SPKeyboardKey::released() {
+	u8 prev = prev_keyboard_state[m_key];
+	u8 cur = cur_keyboard_state[m_key];
+	if (!cur && prev) {
+		return true;
+	}
+	return false;
+}
+
 void SPWindow::init(const char* title, SPViewport& viewport) {
-	//memset(m_prev_keyboard_state, 0, 512);
-	//memset(m_cur_keyboard_state, 0, 512);
+	memset(prev_keyboard_state, 0, SDL_NUM_SCANCODES);
+	memset(cur_keyboard_state, 0, SDL_NUM_SCANCODES);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -31,12 +72,39 @@ void SPWindow::init(const char* title, SPViewport& viewport) {
 void SPWindow::shutdown() {
 	SDL_GL_DeleteContext(m_context);
 	SDL_DestroyWindow(m_window);
+
 }
 
 void SPWindow::update(SPViewport& viewport) {
+
+	// Update vieport
 	int x, y;
 	SDL_GL_GetDrawableSize(m_window, &x, &y);
 	viewport.scale = ((float)x / 960);
+
+	// Update input
+	int numkeys;
+	const u8* buffer = SDL_GetKeyboardState(&numkeys);
+	memcpy(prev_keyboard_state, cur_keyboard_state, numkeys);
+	SDL_Event e;
+	bool asdf = false;
+	while (SDL_PollEvent(&e)) {
+		if (e.type == SDL_QUIT) {
+			quit_event = true;
+		}
+	}
+	memcpy(cur_keyboard_state, buffer, numkeys);
+
+	prev_mouse_state[0] = cur_mouse_state[0];
+	prev_mouse_state[1] = cur_mouse_state[1];
+
+	u32 mouse_mask = SDL_GetMouseState(NULL, NULL);
+	if (mouse_mask & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+		cur_mouse_state[0] = true;
+	}
+	if (mouse_mask & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+		cur_mouse_state[1] = true;
+	}
 }
 
 void SPWindow::clear() {
@@ -53,4 +121,8 @@ void SPWindow::show() {
 
 void SPWindow::hide() {
 	SDL_HideWindow(m_window);
+}
+
+b32 SPWindow::quitEvent() {
+	return quit_event;
 }

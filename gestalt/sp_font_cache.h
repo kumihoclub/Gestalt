@@ -17,7 +17,7 @@ using json = nlohmann::json;
 
 class SPFontCache {
 public:
-	void init();
+	void init(b32 flip_textures);
 	void shutdown();
 	static SPGlyph fetchGlyph(char glyph);
 	static f32 kernOffset(SPGlyph* cur, SPGlyph* next);

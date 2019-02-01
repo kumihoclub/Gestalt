@@ -10,4 +10,5 @@ struct SPMaterial {
 	SPSprite sprite;
 	glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	SPShader* shader;
+	b32 flipped = false;
 };

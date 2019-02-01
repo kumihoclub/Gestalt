@@ -66,12 +66,36 @@ void SPRenderer::draw(SPFrame& frame) {
 		f32 v = renderable.material.sprite.uv.y;
 		f32 w = renderable.material.sprite.size_norm.x;
 		f32 h = renderable.material.sprite.size_norm.y;
-		vert[0].sprite_uv = { u + w, v };
+		/*vert[0].sprite_uv = { u + w, v };
 		vert[1].sprite_uv = { u + w, v + h };
 		vert[2].sprite_uv = { u, v };
 		vert[3].sprite_uv = { u + w, v + h };
 		vert[4].sprite_uv = { u, v + h };
-		vert[5].sprite_uv = { u, v };
+		vert[5].sprite_uv = { u, v };*/
+
+		vert[0].sprite_uv = { u + w, v + h };
+		vert[1].sprite_uv = { u + w, v };
+		vert[2].sprite_uv = { u, v + h };
+
+		vert[3].sprite_uv = { u + w, v };
+		vert[4].sprite_uv = { u, v };
+		vert[5].sprite_uv = { u, v + h };
+
+		/*vert[0].sprite_uv = { u + w, 1.0f - v };
+		vert[1].sprite_uv = { u + w, 1.0f - (v + h) };
+		vert[2].sprite_uv = { u, 1.0f - v };
+		vert[3].sprite_uv = { u + w, 1.0f - (v + h) };
+		vert[4].sprite_uv = { u, 1.0f - (v + h) };
+		vert[5].sprite_uv = { u, 1.0f - v };*/
+
+		/*vert[0].sprite_uv = { u + w, 1.0f - (v + h) };
+		vert[1].sprite_uv = { u + w, 1.0f - v };
+		vert[2].sprite_uv = { u, 1.0f - (v + h) };
+
+		vert[3].sprite_uv = { u + w, 1.0f - v };
+		vert[4].sprite_uv = { u, 1.0f - v };
+		vert[5].sprite_uv = { u, 1.0f - (v + h) };*/
+
 		/*
 
 		/ first triangle

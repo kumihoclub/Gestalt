@@ -23,7 +23,7 @@ void SPShaderCache::init() {
 		"void main()"
 		"{"
 		"f_color = v_color;"
-		"f_uv = v_uv;"
+		"f_uv = vec2(v_uv.x, 1.0 - v_uv.y);"
 		"gl_Position = v_position;"
 		//"gl_Position = vec4(v_position, 0.0, 1.0);"
 		"}";

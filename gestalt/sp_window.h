@@ -15,6 +15,7 @@ public:
 	void swap();
 	void show();
 	void hide();
+	b32 quitEvent();
 
 private:
 	SDL_Window* m_window = nullptr;

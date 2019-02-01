@@ -73,7 +73,7 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 		new_prop.transform.scale.x = transform.scale.x;
 		new_prop.transform.scale.y = transform.scale.y;
 
-		new_prop.transform.scale.y *= -1;
+		//new_prop.transform.scale.y *= -1;
 
 		frame.renderables.push_back(new_prop.renderable(camera, viewport));
 

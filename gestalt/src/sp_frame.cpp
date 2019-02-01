@@ -24,17 +24,14 @@ void SPFrame::sort() {
 }
 
 void SPFrame::set_lock(u32 fps) {
-	m_target_time = milliseconds(u32(((f32)1 / (f32)fps) * 1000));
-	m_timestamp = high_res_clock::now();
+	m_frame_alarm = SPAlarm(((f32)1 / (f32)fps));
 }
 
 b32 SPFrame::ready() {
-	auto delta = high_res_clock::now() - m_timestamp;
-	m_timestamp = high_res_clock::now();
-	m_current_time += std::chrono::duration_cast<nanoseconds>(delta);
-	if (m_current_time > m_target_time) {
-		m_current_time = nanoseconds(0);
-		return true;
+	b32 result = false;
+	result = m_frame_alarm.triggered();
+	if (result) {
+		m_frame_alarm.reset();
 	}
-	return false;
+	return result;
 }

@@ -26,7 +26,12 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			model = glm::translate(model, glm::vec3(origin_offset.x, origin_offset.y, 0.0f));
 			model = glm::translate(model, glm::vec3(transform.pos.x * SP_UNIT_PIXELS * viewport.scale, transform.pos.y * SP_UNIT_PIXELS * viewport.scale, 0.0f));
 			model = glm::rotate(model, transform.rot, glm::vec3(0.0f, 0.0f, 1.0f));
-			model = glm::scale(model, glm::vec3(transform.scale.x * material.get().sprite.size_exact.x * viewport.scale, transform.scale.y * material.get().sprite.size_exact.y * viewport.scale, 0.0f));
+			if (material.get().flipped) {
+				model = glm::scale(model, glm::vec3((transform.scale.x * material.get().sprite.size_exact.x * viewport.scale) * -1, transform.scale.y * material.get().sprite.size_exact.y * viewport.scale, 0.0f));
+			}
+			else {
+				model = glm::scale(model, glm::vec3(transform.scale.x * material.get().sprite.size_exact.x * viewport.scale, transform.scale.y * material.get().sprite.size_exact.y * viewport.scale, 0.0f));
+			}
 			glm::mat4 view(1.0f);
 			view = glm::translate(view, glm::vec3((-camera.pos.x * SP_UNIT_PIXELS * viewport.scale), (camera.pos.y * SP_UNIT_PIXELS * viewport.scale), 0.0f));
 			glm::mat4 proj(1.0f);
@@ -49,6 +54,8 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			viewport_norm.y = ((viewport.size.y / 2) / SP_UNIT_PIXELS);
 			viewport_norm.x *= transform.pos.x;
 			viewport_norm.y *= -transform.pos.y;
+
+			SPSprite spr = material.get().sprite;
 
 			glm::mat4 model(1.0f);
 			model = glm::translate(model, glm::vec3(origin_offset.x, origin_offset.y, 0.0f));

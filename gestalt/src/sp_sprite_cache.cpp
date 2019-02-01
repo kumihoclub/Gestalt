@@ -31,7 +31,7 @@ namespace {
 
 void SPSpriteCache::init() {
 	stbi_set_flip_vertically_on_load(true);
-	for (auto& dir : std_filesystem::recursive_directory_iterator("data/registry/sprite/")) { // God I love std::filesystem
+	for (auto& dir : std_filesystem::recursive_directory_iterator("data/sprite/")) { // God I love std::filesystem
 		if (dir.path().extension().string() == ".json") {
 
 			// Open file
@@ -84,7 +84,7 @@ void SPSpriteCache::parseAtlasJSON(json& atlas_json) {
 
 		json meta = atlas_json["meta"];
 		std::string image_name = meta["image"];
-		std_filesystem::path image_path = "data/registry/sprite";
+		std_filesystem::path image_path = "data/sprite";
 		image_path /= image_name;
 		SPImage new_image;
 		if (std_filesystem::exists(image_path)) {
@@ -120,12 +120,14 @@ void SPSpriteCache::parseAtlasJSON(json& atlas_json) {
 			if (new_image.id != 0) {
 				SPSprite new_sprite;
 				json frame_params = frame["frame"];
-				new_sprite.uv.x = (frame_params["x"] / new_image.x);
-				new_sprite.uv.y = (frame_params["y"] / new_image.y);
+				f32 as = frame_params["x"];
+				f32 asd = frame_params["y"];
+				new_sprite.uv.x = (as / new_image.x);
+				new_sprite.uv.y = (asd / new_image.y);
 				new_sprite.size_exact.x = frame_params["w"];
 				new_sprite.size_exact.y = frame_params["h"];
 				new_sprite.size_norm.x = new_sprite.size_exact.x / (f32)new_image.x;
-				new_sprite.size_norm.y = new_sprite.size_exact.x / (f32)new_image.y;
+				new_sprite.size_norm.y = new_sprite.size_exact.y / (f32)new_image.y;
 				new_sprite.image_id = new_image.id;
 				registry[sprite_name] = new_sprite;
 			}

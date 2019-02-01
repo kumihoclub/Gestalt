@@ -1,0 +1,28 @@
+{"frames": [
+
+{
+	"filename": "sadcat.png",
+	"frame": {"x":1,"y":547,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "test_arena.png",
+	"frame": {"x":1,"y":1,"w":960,"h":544},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":960,"h":544},
+	"sourceSize": {"w":960,"h":544}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "test.png",
+	"format": "RGBA8888",
+	"size": {"w":962,"h":612},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c8a03788a3b8c1023f775519a6f44d35:1052a95dcc7002d19e21130add35a6fd:02ab132358d6d8b512e80119463a8329$"
+}
+}

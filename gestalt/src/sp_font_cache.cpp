@@ -23,6 +23,7 @@ namespace {
 		std::unordered_map<char, SPGlyph> glyphs;
 	};
 
+	b32 flip = false;
 	u8* bitmap;
 	std::vector<char> font_buffer;
 	stbtt_fontinfo font_info;
@@ -31,8 +32,10 @@ namespace {
 
 }
 
-void SPFontCache::init() {
+void SPFontCache::init(b32 flip_textures) {
 	
+	flip = flip_textures;
+
 	std_filesystem::path image_path = "data/font/Mukta-Regular.ttf";
 
 	std::ifstream font_file(image_path, std::ios::binary | std::ios::ate);
@@ -58,7 +61,25 @@ void SPFontCache::init() {
 			std::cout << "Failed to perform font packing." << std::endl;
 		}
 
-		stbtt_PackEnd(&pack_context); 
+		stbtt_PackEnd(&pack_context);
+
+		if (flip) {
+			int w = 1024, h = 1024;
+			int channels = 1;
+			int row, col, z;
+			//stbi_uc *image = (stbi_uc *)result;
+
+			// @OPTIMIZE: use a bigger temp buffer and memcpy multiple pixels at once
+			for (row = 0; row < (h >> 1); row++) {
+				for (col = 0; col < w; col++) {
+					for (z = 0; z < channels; z++) {
+						unsigned char temp = bitmap[(row * w + col) * channels + z];
+						bitmap[(row * w + col) * channels + z] = bitmap[((h - row - 1) * w + col) * channels + z];
+						bitmap[((h - row - 1) * w + col) * channels + z] = temp;
+					}
+				}
+			}
+		}
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); spCheckGLError();// Disable byte-alignment restriction
 

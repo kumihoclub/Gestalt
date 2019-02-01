@@ -1,6 +1,5 @@
 
 #include "sp_window.h"
-#include "sp_input_manager.h"
 #include "sp_renderer.h"
 
 #include "sp_frame.h"
@@ -18,8 +17,12 @@
 
 #include "SDL2/SDL.h"
 
+// SIM
+#include "test_sim.h"
+TestSim sim;
+//
+
 SPWindow window;
-SPInputManager input;
 SPRenderer render;
 
 SPFrame frame;
@@ -34,59 +37,19 @@ int main(int argc, char *argv[]) {
 	viewport.size = { 960.0f, 540.0f };
 	frame.set_lock(60);
 
-	window.init("Black Telephone", viewport);
+	window.init("Sadcat.exe", viewport);
 	shader_cache.init();
 	sprite_cache.init();
-	font_cache.init();
-	input.init();
+	font_cache.init(true);
 	render.init();
+	sim.init();
 
 	window.show();
 
-	//sprite_cache.init();
-	while (!input.quitEvent()) {
+	while (!window.quitEvent()) {
 		if (frame.ready()) {
 			window.update(viewport);
-			input.update();
-
-			// DEBUG
-
-			SPCamera test_camera;
-			//test_camera.pos.y += 8;
-
-			SPRenderText test_text("Hi Mom.");
-			test_text.transform.anchor = SP_ANCHOR_VIEWPORT;
-			test_text.transform.pos = { -1.0f, 1.0f };
-			test_text.transform.scale = { 1.0f, 1.0f };
-			test_text.transform.origin = { -1.0, 1.0 };
-
-			test_text.build(frame, test_camera, viewport);
-
-			//SPCamera test_camera;
-			//test_camera.pos.y += 8;
-			
-			/*SPProp test_prop;
-			SPMaterial new_mat;
-			test_prop.transform.pos = { -1.0, -1.0 };
-			test_prop.transform.anchor = SP_ANCHOR_WORLD;
-			new_mat.shader = SPShaderCache::fetchShader("sprite_default");
-			new_mat.sprite = SPSpriteCache::fetchSprite("sad_cat.png");
-			test_prop.material = new_mat;
-			test_prop.transform.origin = { -1.0, 1.0 };
-			frame.renderables.push_back(test_prop.renderable(test_camera, viewport));*/
-			
-
-			//test_prop.sprite.get().color.r = 1.0;
-			//test_prop.sprite.get().color.g = 0.5;
-			//test_prop.sprite.get().color.b = 0.5;
-			//test_prop.sprite.get().color.a = 0.25;
-
-			//SPRenderable test_renderable(test_prop, test_camera, viewport);
-
-			//frame.renderables.push_back(test_prop.renderable(test_camera, viewport));
-
-			// END DEBUG
-
+			sim.update(viewport, frame);
 			window.clear();
 			frame.sort();
 			render.draw(frame);
@@ -94,12 +57,12 @@ int main(int argc, char *argv[]) {
 			frame.reset();
 		}
 	}
-	//sprite_cache.shutdown();
 
 	window.hide();
 
+	sim.shutdown();
+
 	render.shutdown();
-	input.shutdown();
 	font_cache.shutdown();
 	sprite_cache.shutdown();
 	shader_cache.shutdown();

@@ -105,7 +105,6 @@ set(ANGELSCRIPT_DEPS
 
 set(SP_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_window.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_input_manager.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_renderer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_shader.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_prop.cpp
@@ -115,9 +114,14 @@ set(SP_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_sprite_cache.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_font_cache.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_shader_cache.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_alarm.cpp
 	)
 
-add_executable(black_telephone main.cpp ${SP_SRCS} ${DEP_SRCS} ${GLAD_DEPS} ${ANGELSCRIPT_DEPS} ${BOX2D_DEPS})
+set(SIM_SRCS
+	${CMAKE_CURRENT_SOURCE_DIR}/sim/src/test_sim.cpp
+	)
+
+add_executable(black_telephone main.cpp ${SP_SRCS} ${SIM_SRCS} ${DEP_SRCS} ${GLAD_DEPS} ${ANGELSCRIPT_DEPS} ${BOX2D_DEPS})
 
 set_property(TARGET black_telephone PROPERTY CXX_STANDARD 17)
 set_property(TARGET black_telephone PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -133,6 +137,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/dep
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/freetype #to avoid having to modify every freetype header
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt
+	${CMAKE_CURRENT_SOURCE_DIR}/sim
 	)
 
 #Angelscript compiles with /MT
