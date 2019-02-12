@@ -18,6 +18,8 @@ public:
 	b32 quitEvent();
 
 private:
+	SPViewport m_initial_view;
+	SPViewport m_cur_view;
 	SDL_Window* m_window = nullptr;
 	SDL_GLContext m_context;
 

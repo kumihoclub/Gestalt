@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project (black_telephone)
 
-enable_language(ASM_MASM) #For angelscript on Win64
+#enable_language(ASM_MASM) #For angelscript on Win64
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -11,7 +11,7 @@ set(cmake_cxx_standard 17)
 
 #set_source_files_properties(foo.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
 
-set(BOX2D_DEPS
+set(BOX2D_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/Box2D/Collision/Shapes/b2ChainShape.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/Box2D/Collision/Shapes/b2CircleShape.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/Box2D/Collision/Shapes/b2EdgeShape.cpp
@@ -60,50 +60,85 @@ set(BOX2D_DEPS
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/Box2D/Rope/b2Rope.cpp
 )
 
-set(ANGELSCRIPT_DEPS
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/add-on/scriptstdstring/scriptstdstring.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_atomic.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_builder.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_bytecode.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_arm.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_mips.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_ppc.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_ppc_64.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_sh4.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_gcc.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_mingw.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_msvc.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_msvc_asm.asm
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x86.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_xenon.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_compiler.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_configgroup.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_context.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_datatype.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_gc.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_generic.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_globalproperty.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_memory.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_module.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_objecttype.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_outputbuffer.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_parser.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_restore.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptcode.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptengine.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptfunction.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptnode.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptobject.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_string.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_string_util.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_thread.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_tokenizer.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_typeinfo.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_variablescope.cpp
-	)
+set(LUA_SRCS
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lapi.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lauxlib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lbaselib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lbitlib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lcode.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lcorolib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lctype.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ldblib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ldebug.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ldo.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ldump.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lfunc.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lgc.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/linit.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/liolib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/llex.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lmathlib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lmem.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/loadlib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lobject.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lopcodes.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/loslib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lparser.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lstate.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lstring.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lstrlib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ltable.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ltablib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/ltm.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lundump.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lutf8lib.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lvm.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/lua/lzio.c
+)
+#set(ANGELSCRIPT_DEPS
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/add-on/scriptstdstring/scriptstdstring.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_atomic.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_builder.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_bytecode.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_arm.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_mips.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_ppc.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_ppc_64.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_sh4.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_gcc.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_mingw.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_msvc.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x64_msvc_asm.asm
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_x86.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_callfunc_xenon.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_compiler.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_configgroup.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_context.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_datatype.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_gc.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_generic.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_globalproperty.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_memory.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_module.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_objecttype.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_outputbuffer.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_parser.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_restore.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptcode.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptengine.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptfunction.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptnode.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_scriptobject.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_string.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_string_util.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_thread.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_tokenizer.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_typeinfo.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/dep/angelscript/src/as_variablescope.cpp
+#	)
 
-set(SP_SRCS
+set(GESTALT_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_window.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_renderer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_shader.cpp
@@ -111,17 +146,21 @@ set(SP_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_frame.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_render_text.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_shader.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_sprite_cache.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_sprite_cache.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_font_cache.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_shader_cache.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_alarm.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_database.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/gestalt/src/sp_sim.cpp
 	)
 
 set(SIM_SRCS
-	${CMAKE_CURRENT_SOURCE_DIR}/sim/src/test_sim.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/sim/testing/test_state.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/sim/testing/menu_state.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/sim/src/bt_sim.cpp
 	)
 
-add_executable(black_telephone main.cpp ${SP_SRCS} ${SIM_SRCS} ${DEP_SRCS} ${GLAD_DEPS} ${ANGELSCRIPT_DEPS} ${BOX2D_DEPS})
+add_executable(black_telephone main.cpp ${GESTALT_SRCS} ${SIM_SRCS} ${BOX2D_SRCS} ${LUA_SRCS})
 
 set_property(TARGET black_telephone PROPERTY CXX_STANDARD 17)
 set_property(TARGET black_telephone PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -130,7 +169,6 @@ target_link_libraries(black_telephone
 	opengl32.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/SDL2/lib/SDL2.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/dep/SDL2/lib/SDL2main.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/dep/freetype/lib/freetype.lib
 	)
 
 include_directories(
@@ -141,7 +179,8 @@ include_directories(
 	)
 
 #Angelscript compiles with /MT
-set_target_properties(black_telephone PROPERTIES COMPILE_FLAGS "/MT")
+#set_target_properties(black_telephone PROPERTIES COMPILE_FLAGS "/MT")
+set_target_properties(black_telephone PROPERTIES COMPILE_FLAGS "/MD")
 
 MESSAGE (${CMAKE_CURRENT_SOURCE_DIR})
 

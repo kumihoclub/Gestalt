@@ -21,6 +21,7 @@ private:
 	struct {
 		u32 main_shader = 0;
 		u32 vbo = 0;
+		u32 vbo_cap = 0;
 		u32 vao = 0;
 		u32 uni_texture = 0;
 	} m_gl;

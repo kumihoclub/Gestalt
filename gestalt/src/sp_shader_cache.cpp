@@ -1,4 +1,3 @@
-
 #include "sp_shader_cache.h"
 
 #include <unordered_map>
@@ -43,7 +42,7 @@ void SPShaderCache::init() {
 		"}";
 
 	SPShader default_sprite_shader(vert_src, default_sprite_shader_frag_src);
-	
+
 	u32 u_texture = default_sprite_shader.getUniformLocation("u_texture");
 	default_sprite_shader.setUniformValue(u_texture, 0);
 

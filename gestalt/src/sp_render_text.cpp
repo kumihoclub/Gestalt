@@ -59,11 +59,11 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 
 			new_prop.transform.pos.x = viewport_norm.x;
 			new_prop.transform.pos.x -= ((transform.origin.x + 1) * ((m_full_x / 2)* transform.scale.x));
-			new_prop.transform.pos.x += (xpos + glyph->offset.x * transform.scale.x);
+			new_prop.transform.pos.x += (xpos + glyph->offset.x * transform.scale.x) * viewport.scale;
 			new_prop.transform.pos.x /= ((viewport.size.x / 2) / SP_UNIT_PIXELS);
 
-			new_prop.transform.pos.y = viewport_norm.y + (glyph->offset.y * transform.scale.y);
-			new_prop.transform.pos.y += (((m_largest_y / 2) * (transform.origin.y + 1)) / SP_UNIT_PIXELS);
+			new_prop.transform.pos.y = viewport_norm.y + ((glyph->offset.y * transform.scale.y) * viewport.scale);
+			new_prop.transform.pos.y += (((m_largest_y / 2) * ((transform.origin.y + 1) * transform.scale.y)) / SP_UNIT_PIXELS) * viewport.scale;
 			new_prop.transform.pos.y /= -((viewport.size.y / 2) / SP_UNIT_PIXELS);
 
 		}

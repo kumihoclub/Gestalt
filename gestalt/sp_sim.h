@@ -7,6 +7,7 @@
 
 class SPSim {
 public:
+	virtual ~SPSim() = 0;
 	virtual void init() = 0;
 	virtual void update(SPViewport& view, SPFrame& frame) = 0;
 	virtual void shutdown() = 0;

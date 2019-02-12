@@ -20,7 +20,6 @@ public:
 	SPAlarm();
 	SPAlarm(f32 time_ins_seconds);
 	void set(f32 time_ins_seconds);
-	void step();
 	void pause();
 	void resume();
 	b32 paused();

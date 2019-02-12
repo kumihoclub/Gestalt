@@ -48,6 +48,9 @@ b32 SPKeyboardKey::released() {
 }
 
 void SPWindow::init(const char* title, SPViewport& viewport) {
+	m_initial_view = viewport;
+	m_initial_view.scale = 1.0f; // Scale on initialization should always be 1.0
+	m_cur_view = m_initial_view;
 	memset(prev_keyboard_state, 0, SDL_NUM_SCANCODES);
 	memset(cur_keyboard_state, 0, SDL_NUM_SCANCODES);
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -62,7 +65,7 @@ void SPWindow::init(const char* title, SPViewport& viewport) {
 	viewport.size = { x, y };
 	int res = gladLoadGLLoader(SDL_GL_GetProcAddress);
 	glViewport(0, 0, viewport.size.x, viewport.size.y);
-	glClearColor(0.175f, 0.225f, 0.250f, 1.0f);
+	//glClearColor(0.175f, 0.225f, 0.250f, 1.0f);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -78,9 +81,17 @@ void SPWindow::shutdown() {
 void SPWindow::update(SPViewport& viewport) {
 
 	// Update vieport
-	int x, y;
-	SDL_GL_GetDrawableSize(m_window, &x, &y);
-	viewport.scale = ((float)x / 960);
+	//int x, y;
+	//SDL_GL_GetDrawableSize(m_window, &x, &y);
+	if (m_cur_view.size != viewport.size) {
+		if (viewport.size.x >= m_initial_view.size.x && viewport.size.y >= m_initial_view.size.y) {
+			m_cur_view = viewport;
+			SDL_SetWindowSize(m_window, (int)m_cur_view.size.x, (int)m_cur_view.size.y);
+			glViewport(0, 0, m_cur_view.size.x, m_cur_view.size.y);
+			SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+			viewport.scale = (m_cur_view.size.x / m_initial_view.size.x);
+		}
+	}
 
 	// Update input
 	int numkeys;
@@ -108,6 +119,7 @@ void SPWindow::update(SPViewport& viewport) {
 }
 
 void SPWindow::clear() {
+	glClearColor(0.175f, 0.225f, 0.250f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

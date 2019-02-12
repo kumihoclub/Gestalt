@@ -50,8 +50,8 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			*/
 
 			glm::vec2 viewport_norm;
-			viewport_norm.x = ((viewport.size.x / 2) / SP_UNIT_PIXELS);
-			viewport_norm.y = ((viewport.size.y / 2) / SP_UNIT_PIXELS);
+			viewport_norm.x = ((viewport.size.x / 2) / (SP_UNIT_PIXELS * viewport.scale));
+			viewport_norm.y = ((viewport.size.y / 2) / (SP_UNIT_PIXELS * viewport.scale));
 			viewport_norm.x *= transform.pos.x;
 			viewport_norm.y *= -transform.pos.y;
 

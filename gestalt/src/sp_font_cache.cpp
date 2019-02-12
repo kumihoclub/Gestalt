@@ -56,13 +56,15 @@ void SPFontCache::init(b32 flip_textures) {
 		}
 
 		packed_chars = new stbtt_packedchar[128];
-		res = stbtt_PackFontRange(&pack_context, (unsigned char*)font_buffer.data(), 0, 96, 0, glyph_count, packed_chars);
+		res = stbtt_PackFontRange(&pack_context, (unsigned char*)font_buffer.data(), 0, 128, 0, glyph_count, packed_chars);
 		if (!res) {
 			std::cout << "Failed to perform font packing." << std::endl;
 		}
 
 		stbtt_PackEnd(&pack_context);
 
+
+		// Pulled from stb_image
 		if (flip) {
 			int w = 1024, h = 1024;
 			int channels = 1;
@@ -96,11 +98,12 @@ void SPFontCache::init(b32 flip_textures) {
 			GL_UNSIGNED_BYTE,
 			bitmap
 		); spCheckGLError();
-		// Set image_id options
+		// Set texture_id options
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); spCheckGLError();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); spCheckGLError();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); spCheckGLError();
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); spCheckGLError();
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); spCheckGLError();
+		//glGenerateMipmap(GL_TEXTURE_2D);
 		// Now store character for later use
 		
 
@@ -112,7 +115,7 @@ void SPFontCache::init(b32 flip_textures) {
 			new_glyph.sprite.uv = { (f32)packed_chars[i].x0 / (f32)1024, (f32)packed_chars[i].y0 / (f32)1024 };
 			new_glyph.sprite.size_exact = { packed_chars[i].x1 - packed_chars[i].x0, packed_chars[i].y1 - packed_chars[i].y0 };
 			new_glyph.sprite.size_norm = { new_glyph.sprite.size_exact.x / (f32)1024, new_glyph.sprite.size_exact.y / (f32)1024 };
-			new_glyph.sprite.image_id = font.image;
+			new_glyph.sprite.texture_id = font.image;
 			new_glyph.offset = { 
 				(packed_chars[i].xoff + (new_glyph.sprite.size_exact.x / 2)) / SP_UNIT_PIXELS,
 				(packed_chars[i].yoff + (new_glyph.sprite.size_exact.y / 2)) / SP_UNIT_PIXELS,

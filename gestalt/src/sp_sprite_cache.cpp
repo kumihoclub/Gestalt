@@ -18,7 +18,7 @@
 namespace {
 
 	std::unordered_map<std::string, SPSprite> registry;
-	std::vector<SPImage> images;
+	std::vector<SPTexture> images;
 	SPSprite debug_sprite;
 
 }
@@ -42,7 +42,7 @@ void SPSpriteCache::init() {
 			atlas_file.close();
 			json atlas_json = json::parse(atlas_stream.str());
 
-			// load and generate the image_id(s)
+			// load and generate the texture_id(s)
 
 			// Single atlas
 			parseAtlasJSON(atlas_json);
@@ -52,7 +52,7 @@ void SPSpriteCache::init() {
 
 	u32 debug_texture = generateDebugTexture();
 	SPSprite debug_sprite;
-	debug_sprite.image_id = debug_texture;
+	debug_sprite.texture_id = debug_texture;
 	debug_sprite.size_exact = { 32.0f, 32.0f };
 	debug_sprite.size_norm = { 32.0f / SP_UNIT_PIXELS, 32.0f / SP_UNIT_PIXELS };
 	debug_sprite = debug_sprite;
@@ -86,7 +86,7 @@ void SPSpriteCache::parseAtlasJSON(json& atlas_json) {
 		std::string image_name = meta["image"];
 		std_filesystem::path image_path = "data/sprite";
 		image_path /= image_name;
-		SPImage new_image;
+		SPTexture new_image;
 		if (std_filesystem::exists(image_path)) {
 			// Load image
 			unsigned char *data = stbi_load(image_path.u8string().c_str(), &new_image.x, &new_image.y, &new_image.num_chans, 0);
@@ -128,7 +128,7 @@ void SPSpriteCache::parseAtlasJSON(json& atlas_json) {
 				new_sprite.size_exact.y = frame_params["h"];
 				new_sprite.size_norm.x = new_sprite.size_exact.x / (f32)new_image.x;
 				new_sprite.size_norm.y = new_sprite.size_exact.y / (f32)new_image.y;
-				new_sprite.image_id = new_image.id;
+				new_sprite.texture_id = new_image.id;
 				registry[sprite_name] = new_sprite;
 			}
 			else {

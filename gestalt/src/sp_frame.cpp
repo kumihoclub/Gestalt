@@ -16,9 +16,9 @@ void SPFrame::sort() {
 		else if (b.layer < a.layer)
 			return false;
 		else // name equals.
-			if (a.material.sprite.image_id < b.material.sprite.image_id)
+			if (a.material.sprite.texture_id < b.material.sprite.texture_id)
 				return true;
-			else if (b.material.sprite.image_id < a.material.sprite.image_id)
+			else if (b.material.sprite.texture_id < a.material.sprite.texture_id)
 				return false;
 	});
 }

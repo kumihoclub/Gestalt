@@ -12,6 +12,7 @@ void SPRenderer::init() {
 	glBindBuffer(GL_ARRAY_BUFFER, m_gl.vbo); spCheckGLError();
 	{
 		glBufferData(GL_ARRAY_BUFFER, sizeof(SPVertex) * (6 * 16384), nullptr, GL_DYNAMIC_DRAW);
+		m_gl.vbo_cap = (6 * 16384);
 	}
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(0)); spCheckGLError();
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(4 * sizeof(float))); spCheckGLError();
@@ -39,13 +40,20 @@ void SPRenderer::draw(SPFrame& frame) {
 		if (!last) {
 			last = &renderable;
 		}
-		if (renderable.material.sprite.image_id != last->material.sprite.image_id) {
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, last->material.sprite.image_id);
-			glUseProgram(last->material.shader->id());
-			glBindVertexArray(m_gl.vao);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(SPVertex) * m_vertex.size(), m_vertex.data());
-			glDrawArrays(GL_TRIANGLES, 0, m_vertex.size());
+		if (renderable.material.sprite.texture_id != last->material.sprite.texture_id) {
+			glActiveTexture(GL_TEXTURE0); spCheckGLError();
+			glBindTexture(GL_TEXTURE_2D, last->material.sprite.texture_id); spCheckGLError();
+			glUseProgram(last->material.shader->id()); spCheckGLError();
+			glBindVertexArray(m_gl.vao); spCheckGLError();
+			if (m_vertex.size() <= m_gl.vbo_cap) {
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(SPVertex) * m_vertex.size(), m_vertex.data()); spCheckGLError();
+			}
+			else {
+				m_gl.vbo_cap = m_vertex.size();
+				glBufferData(GL_ARRAY_BUFFER, sizeof(SPVertex) * m_vertex.size(), m_vertex.data(), GL_DYNAMIC_DRAW); spCheckGLError();
+			}
+			//glBufferData(GL_ARRAY_BUFFER, sizeof(SPVertex) * m_vertex.size(), m_vertex.data(), GL_DYNAMIC_DRAW); spCheckGLError();
+			glDrawArrays(GL_TRIANGLES, 0, m_vertex.size()); spCheckGLError();
 			m_vertex.resize(0);
 		}
 		SPVertex vert[6];
@@ -108,7 +116,7 @@ void SPRenderer::draw(SPFrame& frame) {
 		-0.5f,  0.5f, 0.0f   // top left
 
 
-		// positions          // colors           // image_id coords
+		// positions          // colors           // texture_id coords
 		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
 		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
@@ -124,12 +132,20 @@ void SPRenderer::draw(SPFrame& frame) {
 	}
 
 	if (m_vertex.size() > 0) {
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0); spCheckGLError();
 		glUseProgram(last->material.shader->id()); spCheckGLError();
-		glBindTexture(GL_TEXTURE_2D, last->material.sprite.image_id); spCheckGLError();
+		glBindTexture(GL_TEXTURE_2D, last->material.sprite.texture_id); spCheckGLError();
 		glBindVertexArray(m_gl.vao); spCheckGLError();
-		glBufferData(GL_ARRAY_BUFFER, sizeof(SPVertex) * m_vertex.size(), m_vertex.data(), GL_DYNAMIC_DRAW); spCheckGLError();
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(SPVertex) * m_vertex.size(), m_vertex.data(), GL_DYNAMIC_DRAW); spCheckGLError();
+		if (m_vertex.size() <= m_gl.vbo_cap) {
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(SPVertex) * m_vertex.size(), m_vertex.data()); spCheckGLError();
+		}
+		else {
+			m_gl.vbo_cap = m_vertex.size();
+			glBufferData(GL_ARRAY_BUFFER, sizeof(SPVertex) * m_vertex.size(), m_vertex.data(), GL_DYNAMIC_DRAW); spCheckGLError();
+		}
 		glDrawArrays(GL_TRIANGLES, 0, m_vertex.size()); spCheckGLError();
+		glBindVertexArray(0);
 		m_vertex.resize(0);
 	}
 }
