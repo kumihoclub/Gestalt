@@ -6,7 +6,7 @@ All code is licensed MIT, but I would not recommened using this in production.
 
 ### Features:
 * CastleDB sprite loading (requires sprite page, open example salt.dat database file in bin as an example)
-* Sprite batching by texture
+* Draw batching by texture/shader
 * Simple struct-based workflow for getting something up quickly.
 * Timing semantics via a simple Alarm type
 * Trivial keyboard input checking via a key-type that can be created on the fy, no polling required in sim.
