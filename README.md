@@ -1,6 +1,6 @@
 # Gestalt
 
-Results of a (very) staggered 3 month scrum sprint to create tech for a very specific game.
+Results of a (very) staggered 3 month target to create tech for a very specific game.
 
 All code is licensed MIT, but I would not recommened using this in production.
 
