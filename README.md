@@ -18,7 +18,7 @@ All code is licensed MIT, but I would not recommened using this in production.
 * Single pass rendering, no post processing possible.
 * No map format (was planned via CastleDB, but never reached that point)
 * Hard framecap that doesnt account for stuttering
-* MVP generation is 100% cpu side.
+* MVP generation and vertex transformation is 100% cpu side.
 * No physics (even though Box2d is in the repo..)
 * Non SDF font atlas generation
 
