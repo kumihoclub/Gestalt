@@ -1,6 +1,5 @@
 #pragma once
 
-#include "sp_collider.h"
 #include "sp_sprite.h"
 #include "sp_shader.h"
 

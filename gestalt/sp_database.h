@@ -20,7 +20,6 @@ public:
 	static SPSprite fetchSprite(const std::string name);
 
 private:
-	void setupLua();
 	void loadImages();
 	void loadSprites();
 	void generateDebugSprite();

@@ -3,7 +3,6 @@
 #include <numeric>
 #include <cstdio>
 
-#include "chobo/optional.hpp"
 #include "stdint.h"
 
 #define SP_UNIT_PIXELS 32.0f
@@ -20,9 +19,6 @@ typedef int64_t i64;
 
 typedef float  f32;
 typedef double f64;
-
-// since the target compiler is C++11
-typedef u8 byte;
 
 typedef uintptr_t uptr;
 typedef intptr_t iptr;
@@ -59,10 +55,3 @@ typedef i32 b32;
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
-
-using namespace chobo;
-
-//Never used
-/*#define r_cast(type, val) reinterpret_cast<type>(val)
-#define s_cast(type, val) static_cast<type>(val)
-#define d_cast(type, val) dynamic_cast<type>(val)*/

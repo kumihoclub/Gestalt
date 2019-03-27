@@ -23,12 +23,6 @@ namespace {
 
 }
 
-//SPSprite::SPSprite() {}
-
-/*SPSprite::SPSprite(std::string name) {
-	*this = SPSpriteCache::fetchSprite(name);
-}*/
-
 void SPSpriteCache::init() {
 	stbi_set_flip_vertically_on_load(true);
 	for (auto& dir : std_filesystem::recursive_directory_iterator("data/sprite/")) { // God I love std::filesystem

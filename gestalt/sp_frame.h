@@ -9,8 +9,6 @@
 
 #include <vector>
 
-// SPFrame source is located in SPWindow
-
 struct SPFrame {
 	void reset();
 	void sort();

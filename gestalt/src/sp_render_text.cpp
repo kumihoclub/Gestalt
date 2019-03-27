@@ -45,25 +45,23 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 			/*
 			This is kinda backwards. The viewport branch in the prop type requires the position to be in normalized view
 			coordinates. Here we are calculating the non-normalized view units, converting them to normalized, and then
-			converting them back to non-normalized units in the prop type. This may seem strange but since the prop type is ment to
-			represent any type of "concept" in the game and not just this text, its best to do things this way so force user 
-			constructs to conform to the prop type rather than having a million types of props or a million derived versions
-			of props. Inheritance != magic-bullet and has killed many a-project for me.
+			converting them back to non-normalized units in the prop type. This may seem strange but the prop type is ment to
+			represent any type of "concept" in the game and not just this text.
 			*/
 
 			glm::vec2 viewport_norm;
-			viewport_norm.x = ((viewport.size.x / 2) / SP_UNIT_PIXELS);
-			viewport_norm.y = ((viewport.size.y / 2) / SP_UNIT_PIXELS);
+			viewport_norm.x = (((viewport.size.x / 2) / SP_UNIT_PIXELS) * viewport.scale);
+			viewport_norm.y = (((viewport.size.y / 2) / SP_UNIT_PIXELS) * viewport.scale);
 			viewport_norm.x *= transform.pos.x;
 			viewport_norm.y *= -transform.pos.y;
 
 			new_prop.transform.pos.x = viewport_norm.x;
-			new_prop.transform.pos.x -= ((transform.origin.x + 1) * ((m_full_x / 2)* transform.scale.x));
+			new_prop.transform.pos.x -= ((transform.origin.x + 1.0) * ((m_full_x / 2) * transform.scale.x)) * viewport.scale;
 			new_prop.transform.pos.x += (xpos + glyph->offset.x * transform.scale.x) * viewport.scale;
 			new_prop.transform.pos.x /= ((viewport.size.x / 2) / SP_UNIT_PIXELS);
 
 			new_prop.transform.pos.y = viewport_norm.y + ((glyph->offset.y * transform.scale.y) * viewport.scale);
-			new_prop.transform.pos.y += (((m_largest_y / 2) * ((transform.origin.y + 1) * transform.scale.y)) / SP_UNIT_PIXELS) * viewport.scale;
+			new_prop.transform.pos.y += (((m_largest_y / 2) * ((transform.origin.y + 1.0) * transform.scale.y)) / SP_UNIT_PIXELS) * viewport.scale;
 			new_prop.transform.pos.y /= -((viewport.size.y / 2) / SP_UNIT_PIXELS);
 
 		}
@@ -72,8 +70,7 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 
 		new_prop.transform.scale.x = transform.scale.x;
 		new_prop.transform.scale.y = transform.scale.y;
-
-		//new_prop.transform.scale.y *= -1;
+		new_prop.transform.layer = transform.layer;
 
 		frame.renderables.push_back(new_prop.renderable(camera, viewport));
 

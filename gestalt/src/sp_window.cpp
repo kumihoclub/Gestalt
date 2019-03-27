@@ -80,17 +80,11 @@ void SPWindow::shutdown() {
 
 void SPWindow::update(SPViewport& viewport) {
 
-	// Update vieport
-	//int x, y;
-	//SDL_GL_GetDrawableSize(m_window, &x, &y);
-	if (m_cur_view.size != viewport.size) {
-		if (viewport.size.x >= m_initial_view.size.x && viewport.size.y >= m_initial_view.size.y) {
-			m_cur_view = viewport;
-			SDL_SetWindowSize(m_window, (int)m_cur_view.size.x, (int)m_cur_view.size.y);
-			glViewport(0, 0, m_cur_view.size.x, m_cur_view.size.y);
-			SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-			viewport.scale = (m_cur_view.size.x / m_initial_view.size.x);
-		}
+	if (m_cur_view.scale != viewport.scale) {
+		m_cur_view = viewport;
+		SDL_SetWindowSize(m_window, (int)m_cur_view.size.x * m_cur_view.scale, (int)m_cur_view.size.y * m_cur_view.scale);
+		glViewport(0, 0, m_cur_view.size.x * m_cur_view.scale, m_cur_view.size.y * m_cur_view.scale);
+		SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	}
 
 	// Update input

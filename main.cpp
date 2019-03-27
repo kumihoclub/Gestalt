@@ -18,8 +18,8 @@
 #include "SDL2/SDL.h"
 
 // SIM
-#include "bt_sim.h"
-BTSim black_telephone;
+#include "test_sim.h"
+TestSim test_sim;
 //
 
 SPWindow window;
@@ -35,23 +35,21 @@ SPDatabase database;
 int main(int argc, char *argv[]) {
 
 	viewport.size = { 480.0f, 270.0f };
-	//viewport.size = { 1920, 1080 };
-	//viewport.scale = 2;
 	frame.set_lock(60);
 
-	window.init("Sadcat.exe", viewport);
+	window.init("Gestalt", viewport);
 	shader_cache.init();
 	font_cache.init(true);
 	database.init();
 	render.init();
-	black_telephone.init();
+	test_sim.init();
 
 	window.show();
 
 	while (!window.quitEvent()) {
 		if (frame.ready()) {
 			window.update(viewport);
-			black_telephone.update(viewport, frame);
+			test_sim.update(viewport, frame);
 			window.clear();
 			frame.sort();
 			render.draw(frame);
@@ -62,7 +60,7 @@ int main(int argc, char *argv[]) {
 
 	window.hide();
 
-	black_telephone.shutdown();
+	test_sim.shutdown();
 
 	render.shutdown();
 	database.shutdown();
