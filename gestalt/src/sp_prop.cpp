@@ -20,24 +20,24 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 		if (transform.origin.y < -1.0f) origin_offset.y = -1.0f;
 		else if (transform.origin.y > 1.0f) origin_offset.y = 1.0f;
 		else origin_offset.y = transform.origin.y;
-		origin_offset.x = (transform.scale.x * material.val().sprite.size_exact.x * viewport.scale) * (origin_offset.x / 2);
-		origin_offset.y = (transform.scale.y * material.val().sprite.size_exact.y * viewport.scale) * (origin_offset.y / 2);
+		origin_offset.x = (transform.scale.x * material.val().sprite.size_exact.x) * (origin_offset.x / 2);
+		origin_offset.y = (transform.scale.y * material.val().sprite.size_exact.y) * (origin_offset.y / 2);
 
 		if (transform.anchor == SP_ANCHOR_WORLD) {
 			glm::mat4 model(1.0f);
 			model = glm::translate(model, glm::vec3(origin_offset.x, origin_offset.y, 0.0f));
-			model = glm::translate(model, glm::vec3(transform.pos.x * SP_UNIT_PIXELS * viewport.scale, transform.pos.y * SP_UNIT_PIXELS * viewport.scale, 0.0f));
+			model = glm::translate(model, glm::vec3(transform.pos.x * SP_UNIT_PIXELS, transform.pos.y * SP_UNIT_PIXELS, 0.0f));
 			model = glm::rotate(model, transform.rot, glm::vec3(0.0f, 0.0f, 1.0f));
 			if (material.val().flipped) {
-				model = glm::scale(model, glm::vec3((transform.scale.x * material.val().sprite.size_exact.x * viewport.scale) * -1, transform.scale.y * material.val().sprite.size_exact.y * viewport.scale, 0.0f));
+				model = glm::scale(model, glm::vec3((transform.scale.x * material.val().sprite.size_exact.x) * -1, transform.scale.y * material.val().sprite.size_exact.y, 0.0f));
 			}
 			else {
-				model = glm::scale(model, glm::vec3(transform.scale.x * material.val().sprite.size_exact.x * viewport.scale, transform.scale.y * material.val().sprite.size_exact.y * viewport.scale, 0.0f));
+				model = glm::scale(model, glm::vec3(transform.scale.x * material.val().sprite.size_exact.x, transform.scale.y * material.val().sprite.size_exact.y, 0.0f));
 			}
 			glm::mat4 view(1.0f);
-			view = glm::translate(view, glm::vec3((-camera.pos.x * SP_UNIT_PIXELS * viewport.scale), (camera.pos.y * SP_UNIT_PIXELS * viewport.scale), 0.0f));
+			view = glm::translate(view, glm::vec3((-camera.pos.x * SP_UNIT_PIXELS), (camera.pos.y * SP_UNIT_PIXELS), 0.0f));
 			glm::mat4 proj(1.0f);
-			proj = glm::ortho(-((viewport.size.x / 2) * viewport.scale), ((viewport.size.x / 2) * viewport.scale), ((viewport.size.y / 2) * viewport.scale), -((viewport.size.y / 2) * viewport.scale), -64.0f, 64.0f);
+			proj = glm::ortho(-((viewport.size.x / 2)), ((viewport.size.x / 2)), ((viewport.size.y / 2)), -((viewport.size.y / 2)), -64.0f, 64.0f);
 			material = material.val();
 			new_renderable.mvp = proj * view * model;
 			new_renderable.material = material.val();
@@ -51,21 +51,21 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			*/
 
 			glm::vec2 viewport_norm;
-			viewport_norm.x = ((viewport.size.x / 2) / (SP_UNIT_PIXELS * viewport.scale));
-			viewport_norm.y = ((viewport.size.y / 2) / (SP_UNIT_PIXELS * viewport.scale));
-			viewport_norm.x *= transform.pos.x;
-			viewport_norm.y *= -transform.pos.y;
+			viewport_norm.x = ((viewport.size.x / 2) / (SP_UNIT_PIXELS));
+			viewport_norm.y = ((viewport.size.y / 2) / (SP_UNIT_PIXELS));
+			viewport_norm.x *= transform.pos.x * SP_UNIT_PIXELS;
+			viewport_norm.y *= -transform.pos.y * SP_UNIT_PIXELS;
 
 			SPSprite spr = material.val().sprite;
 
 			glm::mat4 model(1.0f);
 			model = glm::translate(model, glm::vec3(origin_offset.x, origin_offset.y, 0.0f));
-			model = glm::translate(model, glm::vec3(viewport_norm.x * SP_UNIT_PIXELS * viewport.scale, viewport_norm.y * SP_UNIT_PIXELS * viewport.scale, 0.0f));
+			model = glm::translate(model, glm::vec3(viewport_norm.x, viewport_norm.y, 0.0f));
 			model = glm::rotate(model, transform.rot, glm::vec3(0.0f, 0.0f, 1.0f));
-			model = glm::scale(model, glm::vec3(transform.scale.x * material.val().sprite.size_exact.x * viewport.scale, transform.scale.y * material.val().sprite.size_exact.y * viewport.scale, 0.0f));
+			model = glm::scale(model, glm::vec3(transform.scale.x * material.val().sprite.size_exact.x, transform.scale.y * material.val().sprite.size_exact.y, 0.0f));
 			glm::mat4 view(1.0f);
 			glm::mat4 proj(1.0f);
-			proj = glm::ortho(-((viewport.size.x / 2) * viewport.scale), ((viewport.size.x / 2) * viewport.scale), ((viewport.size.y / 2) * viewport.scale), -((viewport.size.y / 2) * viewport.scale), -64.0f, 64.0f);
+			proj = glm::ortho(-((viewport.size.x / 2)), ((viewport.size.x / 2)), ((viewport.size.y / 2)), -((viewport.size.y / 2)), -64.0f, 64.0f);
 			material = material.val();
 			new_renderable.mvp = proj * view * model;
 			new_renderable.material = material.val();

@@ -50,18 +50,18 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 			*/
 
 			glm::vec2 viewport_norm;
-			viewport_norm.x = (((viewport.size.x / 2) / SP_UNIT_PIXELS) * viewport.scale);
-			viewport_norm.y = (((viewport.size.y / 2) / SP_UNIT_PIXELS) * viewport.scale);
+			viewport_norm.x = (((viewport.size.x / 2) / SP_UNIT_PIXELS));
+			viewport_norm.y = (((viewport.size.y / 2) / SP_UNIT_PIXELS));
 			viewport_norm.x *= transform.pos.x;
 			viewport_norm.y *= -transform.pos.y;
 
 			new_prop.transform.pos.x = viewport_norm.x;
-			new_prop.transform.pos.x -= ((transform.origin.x + 1.0) * ((m_full_x / 2) * transform.scale.x)) * viewport.scale;
-			new_prop.transform.pos.x += (xpos + glyph->offset.x * transform.scale.x) * viewport.scale;
+			new_prop.transform.pos.x -= ((transform.origin.x + 1.0) * ((m_full_x / 2) * transform.scale.x));
+			new_prop.transform.pos.x += (xpos + glyph->offset.x * transform.scale.x);
 			new_prop.transform.pos.x /= ((viewport.size.x / 2) / SP_UNIT_PIXELS);
 
-			new_prop.transform.pos.y = viewport_norm.y + ((glyph->offset.y * transform.scale.y) * viewport.scale);
-			new_prop.transform.pos.y += (((m_largest_y / 2) * ((transform.origin.y + 1.0) * transform.scale.y)) / SP_UNIT_PIXELS) * viewport.scale;
+			new_prop.transform.pos.y = viewport_norm.y + ((glyph->offset.y * transform.scale.y));
+			new_prop.transform.pos.y += (((m_largest_y / 2) * ((transform.origin.y + 1.0) * transform.scale.y)) / SP_UNIT_PIXELS);
 			new_prop.transform.pos.y /= -((viewport.size.y / 2) / SP_UNIT_PIXELS);
 
 		}
