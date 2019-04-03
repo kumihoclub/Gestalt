@@ -13,6 +13,11 @@ namespace {
 	u8 prev_mouse_state[2];
 	u8 cur_mouse_state[2];
 	b32 quit_event = false;
+	SDL_Window* window_handle = nullptr;
+	SDL_GLContext gl_context;
+	u32 window_width = 0;
+	u32 window_height = 0;
+	u32 window_scale = 1;
 
 }
 
@@ -47,24 +52,23 @@ b32 SPKeyboardKey::released() {
 	return false;
 }
 
-void SPWindow::init(const char* title, SPViewport& viewport) {
-	m_initial_view = viewport;
-	m_initial_view.scale = 1.0f; // Scale on initialization should always be 1.0
-	m_cur_view = m_initial_view;
+void SPWindow::init(const char* title, u32 width, u32 height) {
+	window_width = width;
+	window_height = height;
+	window_scale = 1;
 	memset(prev_keyboard_state, 0, SDL_NUM_SCANCODES);
 	memset(cur_keyboard_state, 0, SDL_NUM_SCANCODES);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, viewport.size.x, viewport.size.y, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN);
-	m_context = SDL_GL_CreateContext(m_window);
+	window_handle = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN);
+	gl_context = SDL_GL_CreateContext(window_handle);
 	SDL_GL_SetSwapInterval(1);
 	int x, y;
-	SDL_GL_GetDrawableSize(m_window, &x, &y);
-	viewport.size = { x, y };
+	SDL_GL_GetDrawableSize(window_handle, &x, &y);
 	int res = gladLoadGLLoader(SDL_GL_GetProcAddress);
-	glViewport(0, 0, viewport.size.x, viewport.size.y);
+	glViewport(0, 0, window_width, window_height);
 	//glClearColor(0.175f, 0.225f, 0.250f, 1.0f);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -73,19 +77,12 @@ void SPWindow::init(const char* title, SPViewport& viewport) {
 }
 
 void SPWindow::shutdown() {
-	SDL_GL_DeleteContext(m_context);
-	SDL_DestroyWindow(m_window);
+	SDL_GL_DeleteContext(gl_context);
+	SDL_DestroyWindow(window_handle);
 
 }
 
-void SPWindow::update(SPViewport& viewport) {
-
-	if (m_cur_view.scale != viewport.scale) {
-		m_cur_view = viewport;
-		SDL_SetWindowSize(m_window, (int)m_cur_view.size.x * m_cur_view.scale, (int)m_cur_view.size.y * m_cur_view.scale);
-		glViewport(0, 0, m_cur_view.size.x * m_cur_view.scale, m_cur_view.size.y * m_cur_view.scale);
-		SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-	}
+void SPWindow::update() {
 
 	// Update input
 	int numkeys;
@@ -118,17 +115,38 @@ void SPWindow::clear() {
 }
 
 void SPWindow::swap() {
-	SDL_GL_SwapWindow(m_window);
+	SDL_GL_SwapWindow(window_handle);
 }
 
 void SPWindow::show() {
-	SDL_ShowWindow(m_window);
+	SDL_ShowWindow(window_handle);
 }
 
 void SPWindow::hide() {
-	SDL_HideWindow(m_window);
+	SDL_HideWindow(window_handle);
 }
 
 b32 SPWindow::quitEvent() {
 	return quit_event;
+}
+
+void SPWindow::setScale(u32 scale) {
+	if (window_scale != scale && scale > 0) {
+		window_scale = scale;
+		SDL_SetWindowSize(window_handle, window_width * window_scale, window_height * window_scale);
+		glViewport(0, 0, window_width * window_scale, window_height * window_scale);
+		SDL_SetWindowPosition(window_handle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	}
+}
+
+u32 SPWindow::getScale() {
+	return window_scale;
+}
+
+u32 SPWindow::getWidth() {
+	return window_width;
+}
+
+u32 SPWindow::getHeight() {
+	return window_height;
 }

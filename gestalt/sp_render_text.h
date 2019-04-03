@@ -14,7 +14,7 @@ class SPRenderText {
 public:
 	SPRenderText();
 	SPRenderText(std::string text);
-	void build(SPFrame& frame, SPCamera& camera, SPViewport& viewport);
+	void build(SPFrame& frame, SPCamera& camera);
 	void set(std::string text);
 	SPTransform transform;
 	glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };

@@ -3,6 +3,7 @@
 
 #include "sp_font_cache.h"
 #include "sp_shader_cache.h"
+#include "sp_window.h"
 
 SPRenderText::SPRenderText() {}
 
@@ -11,7 +12,7 @@ SPRenderText::SPRenderText(std::string text) {
 
 }
 
-void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport) {
+void SPRenderText::build(SPFrame& frame, SPCamera& camera) {
 
 	float xpos = 0.0f;
 	float ypos = 0.0f;
@@ -50,19 +51,19 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 			*/
 
 			glm::vec2 viewport_norm;
-			viewport_norm.x = (((viewport.size.x / 2) / SP_UNIT_PIXELS));
-			viewport_norm.y = (((viewport.size.y / 2) / SP_UNIT_PIXELS));
+			viewport_norm.x = (((f32)SPWindow::getWidth() / 2) / SP_UNIT_PIXELS);
+			viewport_norm.y = (((f32)SPWindow::getHeight() / 2) / SP_UNIT_PIXELS);
 			viewport_norm.x *= transform.pos.x;
 			viewport_norm.y *= -transform.pos.y;
 
 			new_prop.transform.pos.x = viewport_norm.x;
 			new_prop.transform.pos.x -= ((transform.origin.x + 1.0) * ((m_full_x / 2) * transform.scale.x));
 			new_prop.transform.pos.x += (xpos + glyph->offset.x * transform.scale.x);
-			new_prop.transform.pos.x /= ((viewport.size.x / 2) / SP_UNIT_PIXELS);
+			new_prop.transform.pos.x /= (((f32)SPWindow::getWidth() / 2) / SP_UNIT_PIXELS);
 
 			new_prop.transform.pos.y = viewport_norm.y + ((glyph->offset.y * transform.scale.y));
 			new_prop.transform.pos.y += (((m_largest_y / 2) * ((transform.origin.y + 1.0) * transform.scale.y)) / SP_UNIT_PIXELS);
-			new_prop.transform.pos.y /= -((viewport.size.y / 2) / SP_UNIT_PIXELS);
+			new_prop.transform.pos.y /= -(((f32)SPWindow::getHeight() / 2) / SP_UNIT_PIXELS);
 
 		}
 
@@ -72,7 +73,7 @@ void SPRenderText::build(SPFrame& frame, SPCamera& camera, SPViewport& viewport)
 		new_prop.transform.scale.y = transform.scale.y;
 		new_prop.transform.layer = transform.layer;
 
-		frame.renderables.push_back(new_prop.renderable(camera, viewport));
+		frame.renderables.push_back(new_prop.renderable(camera));
 
 		// NOTE: This migtht explode with fonts that have the OPS(or whatever it is called) table and not a kerning table. Dont forget
 		if ((i + 1) < m_glyphs.size()) {

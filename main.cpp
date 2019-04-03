@@ -3,7 +3,6 @@
 #include "sp_renderer.h"
 
 #include "sp_frame.h"
-#include "sp_viewport.h"
 
 #include "sp_font_cache.h"
 #include "sp_shader_cache.h"
@@ -26,7 +25,6 @@ SPWindow window;
 SPRenderer render;
 
 SPFrame frame;
-SPViewport viewport;
 
 SPShaderCache shader_cache;
 SPFontCache font_cache;
@@ -34,10 +32,9 @@ SPDatabase database;
 
 int main(int argc, char *argv[]) {
 
-	viewport.size = { 480.0f, 270.0f };
 	frame.set_lock(60);
 
-	window.init("Gestalt", viewport);
+	window.init("Gestalt", 480, 270);
 	shader_cache.init();
 	font_cache.init(true);
 	database.init();
@@ -48,8 +45,8 @@ int main(int argc, char *argv[]) {
 
 	while (!window.quitEvent()) {
 		if (frame.ready()) {
-			window.update(viewport);
-			test_sim.update(viewport, frame);
+			window.update();
+			test_sim.update(frame);
 			window.clear();
 			frame.sort();
 			render.draw(frame);

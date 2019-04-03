@@ -19,9 +19,9 @@ void TestSim::init() {
 	//END TEST:
 }
 
-void TestSim::update(SPViewport& view, SPFrame& frame) {
+void TestSim::update(SPFrame& frame) {
 	if (m_state_stack.size() > 0) {
-		m_state_stack.top()->update(view, frame, &m_transition_stack);
+		m_state_stack.top()->update(frame, &m_transition_stack);
 		if (m_transition_stack.size() > 0) {
 			SPTransition transition = m_transition_stack.top();
 			if (transition.type == SP_TRANSITION_TYPE_PUSH_RELEASE) {

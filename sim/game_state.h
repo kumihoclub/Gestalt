@@ -17,7 +17,7 @@
 class GameState : public SPState {
 public:
 	void onEnter();
-	void update(SPViewport& view, SPFrame& frame, SPTransitionStack* transition_stack);
+	void update(SPFrame& frame, SPTransitionStack* transition_stack);
 	void onExit();
 
 private:

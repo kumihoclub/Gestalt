@@ -1,5 +1,6 @@
 
 #include "game_state.h"
+#include "sp_window.h"
 
 void GameState::onEnter() {
 
@@ -56,7 +57,7 @@ void GameState::onEnter() {
 
 }
 
-void GameState::update(SPViewport& view, SPFrame& frame, SPTransitionStack* transition_stack) {
+void GameState::update(SPFrame& frame, SPTransitionStack* transition_stack) {
 
 	glm::vec2 vel = { 0.0f, 0.0f };
 
@@ -83,12 +84,10 @@ void GameState::update(SPViewport& view, SPFrame& frame, SPTransitionStack* tran
 	SPKeyboardKey arrow_left = SPKeyboardKey(SDL_SCANCODE_LEFT);
 
 	if (arrow_up.pressed()) {
-		view.scale += 1;
+		SPWindow::setScale(SPWindow::getScale() + 1);
 	}
 	else if (arrow_down.pressed()) {
-		if (view.scale != 1) {
-			view.scale -= 1;
-		}
+		SPWindow::setScale(SPWindow::getScale() - 1);
 	}
 
 	f32 cam_add = 0.0f;
@@ -124,9 +123,9 @@ void GameState::update(SPViewport& view, SPFrame& frame, SPTransitionStack* tran
 
 	mako_prop.transform.pos += vel;
 
-	frame.renderables.push_back(mako_prop.renderable(camera, view));
-	game_state_text.build(frame, camera, view);
-	instruction_text.build(frame, camera, view);
+	frame.renderables.push_back(mako_prop.renderable(camera));
+	game_state_text.build(frame, camera);
+	instruction_text.build(frame, camera);
 
 	SPKeyboardKey space = SPKeyboardKey(SDL_SCANCODE_SPACE);
 	if (space.pressed()) {

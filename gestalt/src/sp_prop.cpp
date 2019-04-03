@@ -1,5 +1,6 @@
 
 #include "sp_prop.h"
+#include "sp_window.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -8,7 +9,7 @@
 
 // NOTE: Around 80% of this could likely be migrated to shaders. For now though, its working.
 
-SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
+SPRenderable SPProp::renderable(SPCamera& camera) {
 	if (material.valid()) {
 		SPRenderable new_renderable;
 		glm::vec2 origin_offset;
@@ -37,7 +38,7 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			glm::mat4 view(1.0f);
 			view = glm::translate(view, glm::vec3((-camera.pos.x * SP_UNIT_PIXELS), (camera.pos.y * SP_UNIT_PIXELS), 0.0f));
 			glm::mat4 proj(1.0f);
-			proj = glm::ortho(-((viewport.size.x / 2)), ((viewport.size.x / 2)), ((viewport.size.y / 2)), -((viewport.size.y / 2)), -64.0f, 64.0f);
+			proj = glm::ortho(-((f32)SPWindow::getWidth() / 2), (f32)SPWindow::getWidth() / 2, (f32)SPWindow::getHeight() / 2, -((f32)SPWindow::getHeight() / 2), -64.0f, 64.0f);
 			material = material.val();
 			new_renderable.mvp = proj * view * model;
 			new_renderable.material = material.val();
@@ -51,8 +52,8 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			*/
 
 			glm::vec2 viewport_norm;
-			viewport_norm.x = ((viewport.size.x / 2) / (SP_UNIT_PIXELS));
-			viewport_norm.y = ((viewport.size.y / 2) / (SP_UNIT_PIXELS));
+			viewport_norm.x = (((f32)SPWindow::getWidth() / 2) / (SP_UNIT_PIXELS));
+			viewport_norm.y = (((f32)SPWindow::getHeight() / 2) / (SP_UNIT_PIXELS));
 			viewport_norm.x *= transform.pos.x * SP_UNIT_PIXELS;
 			viewport_norm.y *= -transform.pos.y * SP_UNIT_PIXELS;
 
@@ -65,7 +66,7 @@ SPRenderable SPProp::renderable(SPCamera& camera, SPViewport& viewport) {
 			model = glm::scale(model, glm::vec3(transform.scale.x * material.val().sprite.size_exact.x, transform.scale.y * material.val().sprite.size_exact.y, 0.0f));
 			glm::mat4 view(1.0f);
 			glm::mat4 proj(1.0f);
-			proj = glm::ortho(-((viewport.size.x / 2)), ((viewport.size.x / 2)), ((viewport.size.y / 2)), -((viewport.size.y / 2)), -64.0f, 64.0f);
+			proj = glm::ortho(-((f32)SPWindow::getWidth() / 2), ((f32)SPWindow::getWidth() / 2), ((f32)SPWindow::getHeight() / 2), -((f32)SPWindow::getHeight() / 2), -64.0f, 64.0f);
 			material = material.val();
 			new_renderable.mvp = proj * view * model;
 			new_renderable.material = material.val();

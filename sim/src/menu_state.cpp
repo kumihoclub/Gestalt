@@ -15,7 +15,7 @@ void MenuState::onEnter() {
 	m_press_space_text.transform.origin = { 0.0f, 0.0f };
 }
 
-void MenuState::update(SPViewport& view, SPFrame& frame, SPTransitionStack* transition_stack) {
+void MenuState::update(SPFrame& frame, SPTransitionStack* transition_stack) {
 	if (m_space.pressed()) {
 		GameState* test = new GameState();
 		SPTransition transition;
@@ -23,8 +23,8 @@ void MenuState::update(SPViewport& view, SPFrame& frame, SPTransitionStack* tran
 		transition.state = test;
 		transition_stack->push(transition);
 	}
-	m_menu_text.build(frame, m_camera, view);
-	m_press_space_text.build(frame, m_camera, view);
+	m_menu_text.build(frame, m_camera);
+	m_press_space_text.build(frame, m_camera);
 }
 
 void MenuState::onExit() {
