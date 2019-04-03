@@ -9,7 +9,7 @@ All code is licensed MIT, but I would not recommened using this in production.
 * Draw batching by texture/shader
 * Simple struct-based prop/entity/gameobject workflow for getting something up quickly.
 * Timing semantics via a simple Alarm type
-* Trivial keyboard input checking via a key-type that can be created on the fy, no polling required in sim.
+* Trivial keyboard input checking via a key-type that can be created on the fly, no polling required in sim.
 * Font rendering with runtime atlas generation
 * Screen and world anchoring for props (Screen anchoring mainly for UI)
 * State stack with transition logic
