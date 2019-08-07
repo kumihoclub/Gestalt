@@ -2,7 +2,7 @@
 
 Halted developement of what was to be a 2D game releated framework.
 
-What I learned from this ths hard way: **make games not engine**
+What I learned from this ths hard way: **make games not engines**.
 
 While there are functional implementations for a lot of the requirements for 2D gamedev in here, most of the methods used in this are naive and were heavily brute forced, 
 and because of this I decided to archive this repo and keep it just for references sakes. I myself have moved on from this and while there may be a few snippets here and 
